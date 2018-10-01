@@ -1,0 +1,77 @@
+html{
+    font-size: 200%;
+}
+
+.err{
+    color: red;
+    font-size: 50%;
+    opacity: 0;
+}
+
+.friend{
+
+    cursor: pointer;
+    color: aqua;
+
+}
+
+.self-message{
+
+    color:blue;
+}
+
+.foreign-message{
+    color: gray;
+}
+
+
+
+.good{
+    position: relative;
+    margin-top: 100px;
+    margin-left: 100px;
+
+
+}
+
+.lab{
+    font-size: 100%;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    height: 45px;
+    padding-top: 3px;
+
+
+    background: aqua;
+
+    cursor: text;
+    perspective: 400px;
+    transition: all .5s;
+
+    text-align: center;
+}
+
+input{
+
+    padding-left: 105px;
+
+    top: 40px;
+    position:absolute;
+    font-size: 100%;
+    width: 260px;
+    height: 45px;
+
+    border: none;
+
+    background:coral;
+
+}
+
+input:focus + label {
+
+    width: 100px;
+
+}
