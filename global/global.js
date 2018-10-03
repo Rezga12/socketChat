@@ -11,7 +11,7 @@ class Main{
 
     init(){
         if(sessionStorage.getItem('user') === null){
-            this.login.renderLogin();
+            this.login.renderLogin(post);
         }else{
             this.chat.renderChat();
             document.getElementById('logout').addEventListener('click',() => {this.logOut()});
@@ -21,7 +21,8 @@ class Main{
     logOut(){
 
         sessionStorage.removeItem('user');
-        this.login.renderLogin();
+        sessionStorage.removeItem('token');
+        this.login.renderLogin(post);
         this.chat.sockClient.close();
 
         this.chat.m  = undefined;
@@ -32,10 +33,10 @@ class Main{
 
 
 
-function post(register){
+function post(register,username,password){
 
-    let username = document.getElementById('user').value;
-    let password = document.getElementById('pass').value;
+    console.log(username);
+    console.log(username);
 
     let myJSON = {
         'username': username,
@@ -61,23 +62,25 @@ function post(register){
                 return rsp.json();
             }
         }).then(jsonObject => {
-
+            console.log(jsonObject.result);
             if(!register) {
                 if (jsonObject.result === 'ACCEPT') {
                     sessionStorage.setItem('user', myJSON.username);
+                    sessionStorage.setItem('token', jsonObject.token);
                     main.chat.renderChat();
                     document.getElementById('logout').addEventListener('click',() => {main.logOut()});
                 } else {
-                    main.login.LoginFailed();
+                    Login.LoginFailed(jsonObject.result);
                 }
             }else{
                 if (jsonObject.result === 'REGISTERED') {
                     sessionStorage.setItem('user', myJSON.username);
+                    sessionStorage.setItem('token', jsonObject.token);
                     main.chat.renderChat();
                     document.getElementById('logout').addEventListener('click',() => {main.logOut()});
 
                 }else{
-                    main.login.registerFailed();
+                    Login.registerFailed(jsonObject.result);
                 }
             }
         });

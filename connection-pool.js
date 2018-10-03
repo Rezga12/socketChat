@@ -30,7 +30,7 @@ class DBManager{
         };
 
         this.connectionPool.query("insert into users set ?",post).then(res=>{
-            console.log(res);
+           // console.log(res);
         }).catch(error => {
             console.log(error)
         });
@@ -39,7 +39,7 @@ class DBManager{
 
     getUsernames(){
 
-        return  this.connectionPool.query('select user_name from users');
+        return  this.connectionPool.query('select * from users');
 
     }
 

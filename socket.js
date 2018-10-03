@@ -6,7 +6,14 @@ class WebSocket{
     constructor(server,database){
         this.webSocket = new WS.Server({server});
         this.connectedClients = new Map();
+        this.tokens = new Map();
         this.base = database;
+     }
+
+     addToken(user,token){
+        if(!this.tokens.has(user)){
+            this.tokens.set(user,token);
+        }
      }
 
     addHandlers(){
@@ -15,22 +22,24 @@ class WebSocket{
 
         this.webSocket.on('connection', (client) => {
 
-            client.send('conncted to the Server');
+
 
             client.on('message', (message) => {
 
                 const myJSON = JSON.parse(message);
                 if(myJSON['type'] === 'M'){
+                    if(myJSON['token'] !== this.tokens.get(myJSON['from'])){
+                        //if someone tries to mess up with session storage
+                        return;
+                    }
+                    console.log(myJSON['token']);
+                    console.log(this.tokens.get(myJSON['from']));
                     let user = myJSON['to'];
                     if(this.connectedClients.has(user) && this.connectedClients.get(user).length !== 0){
                         let arr = this.connectedClients.get(myJSON['to']);
                         arr.forEach((key) => {
                             key.send(myJSON['message']);
                         });
-                    }else{
-
-
-
                     }
 
                     this.base.insertMessage(myJSON['message'],myJSON['from'],myJSON['to']);
@@ -55,6 +64,9 @@ class WebSocket{
                     var index = val.indexOf(client);
                     if (index > -1) {
                         val.splice(index, 1);
+                        if(val.length === 0){
+                            this.tokens.delete(key);
+                        }
                     }
                 });
 
